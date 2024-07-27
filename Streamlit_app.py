@@ -1,6 +1,5 @@
 import streamlit as st
 import pickle
-import numpy as np
 
 # Load the trained model
 with open('churn.pkl', 'rb') as model_file:
@@ -15,6 +14,11 @@ feature_names = [
     'No Internet Service', 'Contract: One Year', 'Contract: Two Years', 'Payment Method: Credit Card',
     'Payment Method: Electronic Check', 'Payment Method: Mailed Check', 'Encoded Customer ID'
 ]
+
+# Encoding mappings
+gender_map = {'Male': 0, 'Female': 1}
+yes_no_map = {'Yes': 1, 'No': 0}
+service_map = {'No Internet Service': 0, 'No': 1, 'Yes': 2}
 
 # Streamlit app
 st.title("Customer Churn Prediction")
@@ -45,23 +49,37 @@ payment_method_electronic_check = st.selectbox('Payment Method: Electronic Check
 payment_method_mailed_check = st.selectbox('Payment Method: Mailed Check', [0, 1])
 encoded_customer_id = st.number_input('Encoded Customer ID', min_value=0)
 
-# Combine input features into a list
+# Prepare the feature vector
 features = [
-    gender, senior_citizen, partner, dependents, tenure, phone_service,
-    online_security, online_backup, device_protection, tech_support,
-    streaming_tv, streaming_movies, paperless_billing, monthly_charges,
-    total_charges, no_phone_service, fiber_optic, no_internet_service,
-    contract_one_year, contract_two_years, payment_method_credit_card,
-    payment_method_electronic_check, payment_method_mailed_check,
+    gender_map[gender],
+    senior_citizen,
+    yes_no_map[partner],
+    yes_no_map[dependents],
+    tenure,
+    yes_no_map[phone_service],
+    service_map[online_security],
+    service_map[online_backup],
+    service_map[device_protection],
+    service_map[tech_support],
+    service_map[streaming_tv],
+    service_map[streaming_movies],
+    yes_no_map[paperless_billing],
+    monthly_charges,
+    total_charges,
+    no_phone_service,
+    fiber_optic,
+    no_internet_service,
+    contract_one_year,
+    contract_two_years,
+    payment_method_credit_card,
+    payment_method_electronic_check,
+    payment_method_mailed_check,
     encoded_customer_id
 ]
 
 # Make prediction when button is clicked
 if st.button("Predict"):
     try:
-        # Ensure features are in the correct format (e.g., numeric)
-        features = [int(x) if isinstance(x, str) and x.isdigit() else float(x) for x in features]
-
         # Make prediction
         prediction = model.predict([features])[0]
 
