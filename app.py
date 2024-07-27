@@ -1,7 +1,7 @@
 import warnings
 import pickle
 import numpy as np
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 # Suppress warnings 
 warnings.filterwarnings("ignore", category=UserWarning, module="sklearn")
@@ -45,7 +45,6 @@ def predict():
             features.append(value)
         
         # Add default values for the missing 'Yes' and 'No' inputs
-        # These are placeholder values to ensure the model gets 26 features
         features.insert(15, 0)  # Placeholder for 'Yes' feature
         features.insert(16, 0)  # Placeholder for 'No' feature
 
@@ -54,11 +53,11 @@ def predict():
 
         output = 'Yes' if prediction == 1 else 'No'
 
-        return render_template('index.html', prediction_text=f'Will the customer churn? {output}', feature_names=feature_names)
+        return jsonify({'prediction': output})
     
     except Exception as e:
         print(f"An error occurred: {e}")
-        return "An error occurred. Please check your input and try again."
+        return jsonify({'error': 'An error occurred. Please check your input and try again.'})
 
 # Run the Flask application
 if __name__ == "__main__":
