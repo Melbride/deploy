@@ -95,9 +95,10 @@ if st.button("Predict"):
             # Make prediction
             prediction = model.predict([features])[0]
 
-            # Display the result
-            output = 'Yes' if prediction == 1 else 'No'
-            st.write(f'Will the customer churn? {output}')
+            # Display result in an expander
+            with st.expander("Prediction Result"):
+                output = 'Yes' if prediction == 1 else 'No'
+                st.write(f'Will the customer churn? {output}')
         except Exception as e:
             st.write(f"An error occurred during prediction: {e}")
     else:
