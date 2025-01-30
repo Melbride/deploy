@@ -39,6 +39,8 @@ The repository includes two files for deploying the model:
         ```
      4. A new browser window will open, or you can navigate to `http://localhost:8501` to view the Streamlit app.
 
+     Check out the live demo and see how it works! [Live Demo](https://deploy-6myk3saaabd7p9tgag5fw8.streamlit.app/)
+
 ## Getting Started
 
 1. **Ensure you have the required dependencies installed.**
